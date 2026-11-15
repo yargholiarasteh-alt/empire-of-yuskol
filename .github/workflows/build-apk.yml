@@ -1,3 +1,4 @@
+
 name: Build Yuskol APK
 
 on:
@@ -31,13 +32,13 @@ jobs:
 
       - name: Install Buildozer
         run: |
-          python3 -m pip install --user --break-system-packages \
-            buildozer cython==0.29.36
+          python3 -m venv $HOME/buildozer-venv
+          $HOME/buildozer-venv/bin/pip install --upgrade pip setuptools
+          $HOME/buildozer-venv/bin/pip install buildozer cython==0.29.36
+          echo "$HOME/buildozer-venv/bin" >> "$GITHUB_PATH"
 
       - name: Build APK
-        run: |
-          export PATH="$HOME/.local/bin:$PATH"
-          buildozer android debug
+        run: buildozer android debug
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
